@@ -36,6 +36,12 @@
 			<scope>test</scope>
 		</dependency>
 
+    <!-- Jackson dependency -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-hibernate5</artifactId>
+    </dependency>
+
     <!-- Logging -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
