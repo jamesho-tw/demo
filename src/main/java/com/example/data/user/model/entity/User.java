@@ -11,6 +11,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -163,6 +167,48 @@ public class User implements Serializable {
 
   public void setStatus(int status) {
     this.status = status;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof User)) {
+      return false;
+    }
+
+    User other = (User) obj;
+    EqualsBuilder bulider = new EqualsBuilder();
+    bulider.append(this.id, other.getId());
+    bulider.append(this.name, other.getName());
+    bulider.append(this.password, other.getPassword());
+    bulider.append(this.salt, other.getSalt());
+    bulider.append(this.created, other.getCreated());
+    bulider.append(this.mustChangePassword, other.isMustChangePassword());
+    bulider.append(this.status, other.getStatus());
+    return bulider.isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    // @formatter:off
+    return new HashCodeBuilder()
+        .append(name)
+        .append(password)
+        .append(salt)
+        .append(created)
+        .append(mustChangePassword)
+        .append(status)
+        .toHashCode();
+    // @formatter:on
+  }
+
+  @Override
+  public String toString() {
+    // TODO: password protection
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE, true,
+        User.class);
   }
 
 }

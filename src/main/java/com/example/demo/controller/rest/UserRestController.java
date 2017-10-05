@@ -2,6 +2,7 @@ package com.example.demo.controller.rest;
 
 import com.example.data.user.model.entity.User;
 import com.example.data.user.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class UserRestController {
 
   @RequestMapping(value = "/{name}", method = RequestMethod.GET)
   public ResponseEntity<?> readByName(@PathVariable("name") String name) {
+    if (StringUtils.isEmpty(StringUtils.trimToNull(name))) {
+      return new ResponseEntity<String>("Invalid argument", HttpStatus.BAD_REQUEST);
+    }
     User user = userService.read(name);
     if (user == null) {
       return new ResponseEntity<String>("User not found", HttpStatus.BAD_REQUEST);
