@@ -46,6 +46,7 @@ public class UserRestController {
     if (user == null) {
       return new ResponseEntity<String>("User not found", HttpStatus.BAD_REQUEST);
     }
+    logger.debug(String.format("USER: %s", user.toString()));
     return new ResponseEntity<User>(user, HttpStatus.OK);
   }
 
