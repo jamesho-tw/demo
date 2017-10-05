@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
   private UserRepository userRepository;
 
   @Override
+  @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
   public User create(User user) {
     if (user == null) {
       return null;
