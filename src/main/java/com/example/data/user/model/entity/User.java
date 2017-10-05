@@ -2,7 +2,19 @@ package com.example.data.user.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
+@Entity
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class User implements Serializable {
 
   /**
@@ -86,6 +98,9 @@ public class User implements Serializable {
     this.status = status;
   }
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true, nullable = false)
   public Long getId() {
     return id;
   }
@@ -94,6 +109,7 @@ public class User implements Serializable {
     this.id = id;
   }
 
+  @Column(name = "name", unique = true, nullable = false, length = 32)
   public String getName() {
     return name;
   }
@@ -102,6 +118,7 @@ public class User implements Serializable {
     this.name = name;
   }
 
+  @Column(name = "secret", nullable = false, length = 128)
   public String getPassword() {
     return password;
   }
@@ -110,6 +127,7 @@ public class User implements Serializable {
     this.password = password;
   }
 
+  @Column(name = "salt", length = 64)
   public String getSalt() {
     return salt;
   }
@@ -118,6 +136,8 @@ public class User implements Serializable {
     this.salt = salt;
   }
 
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "created_at", nullable = false, length = 19)
   public Date getCreated() {
     return created;
   }
@@ -126,6 +146,8 @@ public class User implements Serializable {
     this.created = created;
   }
 
+  @Column(name = "must_change_secret", nullable = false)
+  @Type(type = "org.hibernate.type.NumericBooleanType")
   public boolean isMustChangePassword() {
     return mustChangePassword;
   }
@@ -134,6 +156,7 @@ public class User implements Serializable {
     this.mustChangePassword = mustChangePassword;
   }
 
+  @Column(name = "status", nullable = false)
   public int getStatus() {
     return status;
   }
