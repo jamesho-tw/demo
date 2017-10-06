@@ -2,11 +2,17 @@ package com.example.data.user.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -60,6 +66,11 @@ public class User implements Serializable {
    * The user status.
    */
   private int status;
+
+  /**
+   * The entity relationships. {@link Role} <p> The many-to-many. </p>
+   */
+  private Set<Role> roles;
 
   /**
    * Constructor.
@@ -169,6 +180,21 @@ public class User implements Serializable {
     this.status = status;
   }
 
+  @ManyToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "related_user_role",
+      joinColumns = @JoinColumn(name = "user_id", unique = true),
+      inverseJoinColumns = @JoinColumn(name = "role_id", unique = true),
+      uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"})
+  )
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -194,6 +220,7 @@ public class User implements Serializable {
   public int hashCode() {
     // @formatter:off
     return new HashCodeBuilder()
+        .append(id)
         .append(name)
         .append(password)
         .append(salt)
